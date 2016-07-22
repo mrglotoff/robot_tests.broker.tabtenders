@@ -8,9 +8,9 @@ Library   tab_service.py
 
 
 *** Variables ***
-${sign_in}                                                      css=.qa_entrance_btn
-${login_sign_in}                                                id=phone_email
-${password_sign_in}                                             id=password
+${sign_in}                                                      css=.login_form_button
+${login_sign_in}                                                id=user_email
+${password_sign_in}                                             id=user_password
 ${locator.title}                                                css=.qa_title
 ${locator.status}                                               xpath=//td[contains(@class, 'zk-status')]
 ${locator.description}                                          css=.qa_descr
@@ -58,5 +58,5 @@ Login
   Clear Element Text   id=phone_email
   Input text      ${login_sign_in}          ${USERS.users['${ARGUMENTS[0]}'].login}
   Input text      ${password_sign_in}       ${USERS.users['${ARGUMENTS[0]}'].password}
-  Click Button    id=submit_login_button
+  Click Button    css=.btn_submit
   Sleep   2
