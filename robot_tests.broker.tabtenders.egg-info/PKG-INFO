@@ -1,8 +1,8 @@
 Metadata-Version: 1.0
-Name: robot-tests.broker.tab
+Name: robot-tests.broker.tabtenders
 Version: 0.0.dev1
 Summary: prom broker for OpenProcurement Robot tests
-Home-page: https://github.com/vgomeniuk/robot_tests.broker.tab
+Home-page: https://github.com/vgomeniuk/robot_tests.broker.tabtenders
 Author: UNKNOWN
 Author-email: UNKNOWN
 License: UNKNOWN
