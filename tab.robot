@@ -8,9 +8,18 @@ Library   tab_service.py
 
 
 *** Variables ***
-${sign_in}                                                      css=.login_form_button
-${login_sign_in}                                                id=user_email
-${password_sign_in}                                             id=user_password
+${sign_in}                                                      jquery=div.login_form_button
+${login_sign_in}                                                jquery=input[value_id^="user_email"]
+${password_sign_in}                                             jquery=input[value_id^="user_password"]
+
+
+
+
+
+
+
+
+
 ${locator.title}                                                css=.qa_title
 ${locator.status}                                               xpath=//td[contains(@class, 'zk-status')]
 ${locator.description}                                          css=.qa_descr
