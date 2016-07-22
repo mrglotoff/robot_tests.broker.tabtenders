@@ -8,9 +8,10 @@ Library   tab_service.py
 
 
 *** Variables ***
-${sign_in}                                                      jquery=div.login_form_button
-${login_sign_in}                                                jquery=input[value_id^="user_email"]
-${password_sign_in}                                             jquery=input[value_id^="user_password"]
+${sign_in_form}                                                 jquery=div.login_form_button
+${login_sign_in}                                                jquery=input#user_email
+${password_sign_in}                                             jquery=input#user_password
+${sign_in_button}                                               jquery=input[value="Увійти"]
 
 
 
@@ -62,10 +63,10 @@ ${locator.questions[0].answer}                                  css=.zk-question
 
 Login
   [Arguments]  @{ARGUMENTS}
-  Click Element   ${sign_in}
+  Click Element   ${sign_in_form}
   Sleep   1
-  Clear Element Text   id=phone_email
+  Clear Element Text   ${login_sign_in}
   Input text      ${login_sign_in}          ${USERS.users['${ARGUMENTS[0]}'].login}
   Input text      ${password_sign_in}       ${USERS.users['${ARGUMENTS[0]}'].password}
-  Click Button    css=.btn_submit
-  Sleep   2
+  Click Button    ${sign_in_button}
+  Sleep   200
