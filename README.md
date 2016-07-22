@@ -16,8 +16,8 @@ To run this test on your local machine:
 
 	2.1. buildout.cfg in ProjectDirectory root (./robot_tests/);
 
-	2.2. ./op_robot_tests/tests_files/brokers.yaml;
+	2.2. ./op_robot_tests/tests_files/data/brokers.yaml;
 	
-	2.3. ./op_robot_tests/tests_files/users.yaml;
+	2.3. ./op_robot_tests/tests_files/data/users.yaml;
 
 3. Build Project and run test using broker name "tabtenders"
