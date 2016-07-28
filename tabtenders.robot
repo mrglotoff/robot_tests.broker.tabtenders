@@ -111,18 +111,6 @@ Login
   ${region}=                              Get From Dictionary         ${item0.deliveryAddress}                region
 
 
-
-
-
-  ${cav_id}=                              Get From Dictionary         ${item0.classification}                 id
-  ${latitude}=                            Get From Dictionary         ${item0.deliveryLocation}               latitude
-  ${longitude}=                           Get From Dictionary         ${item0.deliveryLocation}               longitude
-
-
-
-
-
-
   # Start executing
   Go to                                   ${CREATE_TENDER_PAGE}
 
@@ -158,9 +146,12 @@ Login
   Input text                              jquery=input#tender_items_attributes_0_postal_code                  ${postalCode}
   Sleep                                   1
 
-  # Submit tender
-  Execute Javascript                      (function(){window.$('span:contains("Опублікувати")').click();})()
+  # Submit tender. Temporary unavailable
+  # Execute Javascript                      (function(){window.$('span:contains("Опублікувати")').click();})()
 
-  Sleep                                   20
+  # Get tender ID
+  # Temporary - hardcoded value as not all the functional is ready
+  Sleep                                   5
+  ${tenderID}=                            getTenderID                                                         jquery=title
 
-  [Return]  ${tender_data}
+  [Return]  ${tenderID}

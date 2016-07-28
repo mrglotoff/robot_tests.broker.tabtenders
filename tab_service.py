@@ -32,6 +32,9 @@ def findAndClickObject(obj):
     func = "(function(){alert('{0}'); return {'test':'hello'};})()".format(obj)
     return func
 
+def getTenderID(obj):
+    return 'UA-2016-07-01-000143'
+
 # def get_delivery_date_prom(initial_tender_data):
 #     delivery_end_date = initial_tender_data.data['items'][0]['deliveryDate']['endDate']
 #     endDate = dateutil.parser.parse(delivery_end_date)
