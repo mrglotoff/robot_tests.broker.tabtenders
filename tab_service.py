@@ -12,7 +12,7 @@ def adapt_minimalStep(tender_data):
     tender_data['minimalStep']['amount'] = round(percentage * value_amount, 2)
     return percentage * 100
 
-def get_tender_dates(initial_tender_data, key):
+def getTenderDates(initial_tender_data, key):
     tender_period = initial_tender_data.data.tenderPeriod
     data = {
         'endPeriod': parseDates(tender_period['startDate']),
@@ -26,14 +26,17 @@ def parseDates(period):
 def chooseUnit(unitCode):
     return "li[data-value=\"{}\"]".format(unitCode)
 
-def findAndClickObject(obj):
-    # If object can't be clicked by standart Selenium Command
-    # Execute as JS function
-    func = "(function(){alert('{0}'); return {'test':'hello'};})()".format(obj)
-    return func
-
 def getTenderID(obj):
-    return 'UA-2016-07-01-000143'
+    return obj
+
+def tenderAmountType(amount):
+    return "li.select_tender_{}".format(1 if amount <= 50000 else 2)
+
+def lotAmountType(lots):
+    return "li.lots_type_{}".format(1 if len(lots) == 1 else 2)
+
+  # log to console                          \nTender title: ${title}\n
+
 
 # def get_delivery_date_prom(initial_tender_data):
 #     delivery_end_date = initial_tender_data.data['items'][0]['deliveryDate']['endDate']

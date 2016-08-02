@@ -10,15 +10,11 @@ Library   tab_service.py
 *** Variables ***
 ${CREATE_TENDER_PAGE}                                           http://tr1tr.tab.com.ua/tenders/new
 
-${sign_in_form}                                                 jquery=div.login_form_button
-${login_sign_in}                                                jquery=input#user_email
-${password_sign_in}                                             jquery=input#user_password
+${signInForm}                                                   jquery=div.login_form_button
+${loginField}                                                   jquery=input#user_email
+${passwordForm}                                                 jquery=input#user_password
 ${sign_in_button}                                               jquery=input[value="Увійти"]
 ${unit_code_selector}                                           jquery=div.select_tender_items_attributes__0__unit_code_
-
-
-
-
 
 
 
@@ -55,30 +51,31 @@ ${locator.questions[0].answer}                                  css=.zk-question
 
 *** Keywords ***
 Підготувати клієнт для користувача
-  [Arguments]     @{ARGUMENTS}
+  [Arguments]                             @{ARGUMENTS}
   [Documentation]  Відкрити брaвзер, створити обєкт api wrapper, тощо
-  Open Browser  ${USERS.users['${ARGUMENTS[0]}'].homepage}  ${USERS.users['${ARGUMENTS[0]}'].browser}  alias=${ARGUMENTS[0]}
+  Open browser          ${USERS.users['${ARGUMENTS[0]}'].homepage}  ${USERS.users['${ARGUMENTS[0]}'].browser}  alias=${ARGUMENTS[0]}
   Set Window Size       @{USERS.users['${ARGUMENTS[0]}'].size}
   Set Window Position   @{USERS.users['${ARGUMENTS[0]}'].position}
-  Run Keyword If   '${ARGUMENTS[0]}' != 'Tab_Viewer'   Login   ${ARGUMENTS[0]}
+  Run Keyword If        '${ARGUMENTS[0]}' != 'Tab_Viewer'             login               ${ARGUMENTS[0]}
+
+
 
 Login
-  [Arguments]  @{ARGUMENTS}
-  Click Element   ${sign_in_form}
-  Sleep   1
-  Clear Element Text   ${login_sign_in}
-  Input text      ${login_sign_in}          ${USERS.users['${ARGUMENTS[0]}'].login}
-  Input text      ${password_sign_in}       ${USERS.users['${ARGUMENTS[0]}'].password}
-  Click Button    ${sign_in_button}
+  [Arguments]                             @{ARGUMENTS}
+  Click Element                           ${signInForm}
   Sleep   1
 
-Підготувати дані для оголошення тендера
-  [Arguments]  ${username}  ${tender_data}
-  ${tender_data}=   adapt_minimalStep   ${tender_data}
-  [Return]  ${tender_data}
+  Clear Element Text                      ${loginField}
+  Input text                              ${loginField}               ${USERS.users['${ARGUMENTS[0]}'].login}
+  Input text                              ${passwordForm}             ${USERS.users['${ARGUMENTS[0]}'].password}
+  Click Button                            ${sign_in_button}
+  Sleep   1
+
+
+
 
 Створити тендер
-  [Arguments]  @{ARGUMENTS}
+  [Arguments]                             @{ARGUMENTS}
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  tender_data
@@ -92,8 +89,8 @@ Login
   ${minimalStepPercentage}                adapt_minimalStep           ${ARGUMENTS[1].data}
   ${minimalStepAmount}                    Get From Dictionary         ${ARGUMENTS[1].data.minimalStep}        amount
   ${enquiryPeriod}=                       Get From Dictionary         ${ARGUMENTS[1].data}                    enquiryPeriod
-  ${endPeriodAdjustments}=                get_tender_dates            ${ARGUMENTS[1]}                         endPeriod
-  ${endReceiveOffers}=                    get_tender_dates            ${ARGUMENTS[1]}                         endDate
+  ${endPeriodAdjustments}=                getTenderDates              ${ARGUMENTS[1]}                         endPeriod
+  ${endReceiveOffers}=                    getTenderDates              ${ARGUMENTS[1]}                         endDate
 
   # Product/Service info variables
   ${items}=                               Get From Dictionary         ${ARGUMENTS[1].data}                    items
@@ -101,23 +98,39 @@ Login
   ${descrLot}=                            Get From Dictionary         ${item0}                                description
   ${unitCode}=                            Get From Dictionary         ${item0.unit}                           code
   ${quantity}=                            Get From Dictionary         ${item0}                                quantity
-  ${deliveryFromDate}=                    Get From Dictionary         ${item0.deliveryDate}                   endDate
-  ${deliveryFromDate}=                    parseDates                  ${deliveryFromDate}
+  ${deliveryFromDate}=                    getTenderDates              ${ARGUMENTS[1]}                         endDate
   ${deliveryToDate}=                      Get From Dictionary         ${item0.deliveryDate}                   endDate
   ${deliveryToDate}=                      parseDates                  ${deliveryToDate}
   ${postalCode}=                          Get From Dictionary         ${item0.deliveryAddress}                postalCode
   ${locality}=                            Get From Dictionary         ${item0.deliveryAddress}                locality
   ${streetAddress}=                       Get From Dictionary         ${item0.deliveryAddress}                streetAddress
   ${region}=                              Get From Dictionary         ${item0.deliveryAddress}                region
+  ${cpvIdMain}=                           Get From Dictionary         ${item0.classification}                 id
+  ${cpvIdAdditional}=                     Get From Dictionary         ${item0.additionalClassifications[0]}   id
 
 
   # Start executing
   Go to                                   ${CREATE_TENDER_PAGE}
 
+  # Tender type
+  Wait Until Page Contains Element        jquery=div.modal_title                                              20
+  Click Element                           jquery=li.procedure_1
+  Sleep                                   1
+  Click Element                           jquery=li.organization_type_1
+  Sleep                                   1
+  Click Element                           jquery=li.tender_items_type_1
+  Sleep                                   1
+  ${tenderAmountType}                     tenderAmountType                                                    ${budget}
+  Click Element                           jquery=${tenderAmountType}
+  Sleep                                   1
+  ${lotAmountType}                        lotAmountType                                                       ${items}
+  Click Element                           jquery=${lotAmountType}
+  Sleep                                   1
+
   # Tender info
   Wait Until Page Contains Element        jquery=input#tender_title                                           20
   Input text                              jquery=input#tender_title                                           ${title}
-  Input text                              jquery=input#tender_description                                     ${description}
+  Input text                              jquery=textarea#tender_description                                  ${description}
   ${budget}=                              Convert To String                                                   ${budget}
   Input text                              jquery=input#tender_value_attributes_amount                         ${budget}
   ${minimalStepAmount}=                   Convert To String                                                   ${minimalStepAmount}
@@ -129,6 +142,8 @@ Login
   Input text                              jquery=input#tender_enquiry_period_attributes_end_date              ${endPeriodAdjustments}
   Input text                              jquery=input#tender_tender_period_attributes_end_date               ${endReceiveOffers}
   Sleep                                   1
+  Execute Javascript                      (function(){window.$('input#tender_guarantee_attributes_guarantee_type_1').click();})()
+  Sleep                                   1
 
   # Product/Service info
   Input text                              jquery=input#tender_items_attributes_0_description                  ${descrLot}
@@ -138,6 +153,23 @@ Login
   Sleep                                   1
   ${unitCodeSelector}=                    chooseUnit                                                          ${unitCode}
   Click Element                           jquery=${unitCodeSelector}
+  Sleep                                   1
+
+  Click Element                           jquery=span.btn_editing[data-type="cpv"]
+  Wait Until Page Contains Element        jquery=input#search_dkpp2015                                        20
+
+  Input text                              jquery=input#search_dkpp2015                                        ${cpvIdMain}
+  Execute Javascript                      (function(){window.$('input[value="${cpvIdMain}"]').click();})()
+  Click Element                           jquery=span:contains("Зберегти")
+  Sleep                                   1
+  Click Element                           jquery=span.btn_editing[data-type="dkpp"]
+  Wait Until Page Contains Element        jquery=input#search_dkpp2010                                        20
+  Input text                              jquery=input#search_dkpp2010                                        ${cpvIdAdditional}
+  Execute Javascript                      (function(){window.$('input[value="${cpvIdAdditional}"]').click();})()
+  Sleep                                   1
+  Execute Javascript                      (function(){window.$('span:contains("Зберегти")').click();})()
+  Sleep                                   1
+
   Input text                              jquery=input#tender_items_attributes_0_delivery_date_attributes_start_date              ${deliveryFromDate}
   Input text                              jquery=input#tender_items_attributes_0_delivery_date_attributes_end_date                ${deliveryToDate}
   Input text                              jquery=input#tender_items_attributes_0_region                       ${region}
@@ -148,10 +180,56 @@ Login
 
   # Submit tender. Temporary unavailable
   # Execute Javascript                      (function(){window.$('span:contains("Опублікувати")').click();})()
+  Click Element                           jquery=input.save_as_draft                   # Temporary save as draft instead of publishing
 
   # Get tender ID
   # Temporary - hardcoded value as not all the functional is ready
-  Sleep                                   5
-  ${tenderID}=                            getTenderID                                                         jquery=title
+  Wait Until Page Contains Element        jquery=div.tender-sections-header                                   20
+  ${tenderID_container}=                  Get Text                                                            jquery=div.tender-title-info
+  ${tenderID}=                            getTenderID                                                         ${tenderID_container}
+  log to console                          \nTender ID: ${tenderID}\n
+  Sleep                                   2
 
   [Return]  ${tenderID}
+
+
+Завантажити документ
+  [Arguments]  @{ARGUMENTS}
+  [Documentation]
+  ...      ${ARGUMENTS[0]} ==  username
+  ...      ${ARGUMENTS[1]} ==  ${filepath}
+  ...      ${ARGUMENTS[2]} ==  ${tenderID}
+
+  Poshuk tendera po identyficatoru        ${ARGUMENTS[0]}                                ${ARGUMENTS[2]}
+  Sleep                                   1
+  Click Element                           jquery=a:contains("Редагувати")
+  Sleep                                   1
+  # Click Element                           jquery=a.documents_add
+  Sleep                                   1
+  # Choose File                           jquery=input[type="file"]                      ${ARGUMENTS[1]}
+
+  Sleep                                   2
+  Click Element                           jquery=input.save_as_draft                   # Temporary save as draft instead of publishing
+  Sleep                                   3
+
+
+
+# Rename to "Пошук тендера по ідентифікатору" from name when integration with CDB will be implemented
+Poshuk tendera po identyficatoru
+  [Arguments]  @{ARGUMENTS}
+  [Documentation]
+  ...      ${ARGUMENTS[0]} ==  username
+  ...      ${ARGUMENTS[1]} ==  tender_id
+  log to console                          \n--------------------------\nПошук тендера по ідентифікатору\n--------------------------
+  Go to                                   ${USERS.users['${ARGUMENTS[0]}'].homepage}
+  Sleep                                   1
+  Input Text                              jquery=input[name="key"]                                            ${ARGUMENTS[1]}
+  Sleep                                   1
+  Click Button                            jquery=input[name="search_submit"]
+  Sleep                                   1
+
+  Click Element                           jquery=a:contains("${ARGUMENTS[1]}")
+  Sleep                                   1
+  log to console                          \n--------------------------\nСторінку тендера завантажено\n--------------------------
+  log to console                          \n$Tender ID: ${ARGUMENTS[1]}\n--------------------------
+  Sleep                                   3
