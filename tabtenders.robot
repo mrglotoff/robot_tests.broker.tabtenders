@@ -69,7 +69,6 @@ Login
   Input text                              ${loginField}               ${USERS.users['${ARGUMENTS[0]}'].login}
   Input text                              ${passwordForm}             ${USERS.users['${ARGUMENTS[0]}'].password}
   Click Button                            ${sign_in_button}
-  Sleep   1
 
 
 
@@ -140,8 +139,9 @@ Login
   Sleep                                   1
   Execute Javascript                      (function(){window.$('input#tender_value_attributes_included_tax').click();})()
   Input text                              jquery=input#tender_enquiry_period_attributes_end_date              ${endPeriodAdjustments}
+  Focus                                   jquery=input#tender_tender_period_attributes_end_date  # Focus on next field to autocomplete time
   Input text                              jquery=input#tender_tender_period_attributes_end_date               ${endReceiveOffers}
-  Sleep                                   1
+  Focus                                   jquery=textarea#tender_description  # Focus on next field to autocomplete time
   Execute Javascript                      (function(){window.$('input#tender_guarantee_attributes_guarantee_type_1').click();})()
   Sleep                                   1
 
@@ -176,21 +176,22 @@ Login
   Input text                              jquery=input#tender_items_attributes_0_locality                     ${locality}
   Input text                              jquery=input#tender_items_attributes_0_street_address               ${streetAddress}
   Input text                              jquery=input#tender_items_attributes_0_postal_code                  ${postalCode}
-  Sleep                                   1
+  Sleep                                   15
 
-  # Submit tender. Temporary unavailable
-  # Execute Javascript                      (function(){window.$('span:contains("Опублікувати")').click();})()
-  Click Element                           jquery=input.save_as_draft                   # Temporary save as draft instead of publishing
+  # Submit tender
+  Click Element                           jquery=input[name="update_on_prozorro"]
 
   # Get tender ID
-  # Temporary - hardcoded value as not all the functional is ready
+  # Temporary - use title
   Wait Until Page Contains Element        jquery=div.tender-sections-header                                   20
   ${tenderID_container}=                  Get Text                                                            jquery=div.tender-title-info
   ${tenderID}=                            getTenderID                                                         ${tenderID_container}
   log to console                          \nTender ID: ${tenderID}\n
-  Sleep                                   2
+  Sleep                                   1
 
   [Return]  ${tenderID}
+
+
 
 
 Завантажити документ
@@ -200,7 +201,7 @@ Login
   ...      ${ARGUMENTS[1]} ==  ${filepath}
   ...      ${ARGUMENTS[2]} ==  ${tenderID}
 
-  Poshuk tendera po identyficatoru        ${ARGUMENTS[0]}                                ${ARGUMENTS[2]}
+  tabtenders.Пошук тендера по ідентифікатору            ${ARGUMENTS[0]}                                ${ARGUMENTS[2]}
   Sleep                                   1
   Click Element                           jquery=a:contains("Редагувати")
   Sleep                                   1
@@ -214,8 +215,7 @@ Login
 
 
 
-# Rename to "Пошук тендера по ідентифікатору" from name when integration with CDB will be implemented
-Poshuk tendera po identyficatoru
+Пошук тендера по ідентифікатору
   [Arguments]  @{ARGUMENTS}
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
@@ -228,8 +228,15 @@ Poshuk tendera po identyficatoru
   Click Button                            jquery=input[name="search_submit"]
   Sleep                                   1
 
-  Click Element                           jquery=a:contains("${ARGUMENTS[1]}")
+  Page Should Contain Element             jquery=div.tender-title-info                      Tender page not loaded                          WARN
   Sleep                                   1
+  log to console                          \nTender ID: ${ARGUMENTS[1]}\n--------------------------
   log to console                          \n--------------------------\nСторінку тендера завантажено\n--------------------------
-  log to console                          \n$Tender ID: ${ARGUMENTS[1]}\n--------------------------
-  Sleep                                   3
+
+
+
+
+Run test session
+  [Arguments]                             @{ARGUMENTS}
+  Execute Javascript                      (function(){ window.$('body')[0].classList.add("_TEST_");})()
+  Sleep                                   1

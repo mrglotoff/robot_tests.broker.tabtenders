@@ -3,7 +3,6 @@ import dateutil.parser
 import random
 from datetime import datetime
 
-
 def adapt_minimalStep(tender_data):
     # Modify amount with new percentage
     value_amount = tender_data['value']['amount']
@@ -27,7 +26,7 @@ def chooseUnit(unitCode):
     return "li[data-value=\"{}\"]".format(unitCode)
 
 def getTenderID(obj):
-    return obj
+    return obj.capitalize()
 
 def tenderAmountType(amount):
     return "li.select_tender_{}".format(1 if amount <= 50000 else 2)
