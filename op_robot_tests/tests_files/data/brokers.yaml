@@ -252,4 +252,3 @@ tabtenders:
         tender_owner:   tabtenders_Owner
         viewer:         tabtenders_Viewer
         provider:       tabtenders_Provider1
-    timeout_on_wait: 10
