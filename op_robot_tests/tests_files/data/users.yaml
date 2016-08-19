@@ -428,16 +428,22 @@ users:
     tabtenders_Viewer:
         broker:   tabtenders
         homepage: "http://tr1tr.tab.com.ua/"
-        login:    test2@test.com
-        password: 12345678
         browser:  chrome
         position: [640, 0]
         size:     [1280, 1024]
     tabtenders_Provider1:
         broker:   tabtenders
         homepage: "http://tr1tr.tab.com.ua/"
-        login:    test2@test.com
-        password: 12345678
+        login:    provider@test.com
+        password: 654321
+        browser:  chrome
+        position: [640, 0]
+        size:     [1280, 1024]
+    tabtenders_Provider2:
+        broker:   tabtenders
+        homepage: "http://tr1tr.tab.com.ua/"
+        login:    provider_2@test.com
+        password: 123123
         browser:  chrome
         position: [640, 0]
         size:     [1280, 1024]

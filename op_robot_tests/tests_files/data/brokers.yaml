@@ -245,10 +245,11 @@ APStender:
 tabtenders:
     intervals:
         default:
-            enquiry: [4, 4]
-            tender:  [0,  30]
+            enquiry: [0, 5]
+            tender:  [0,  15]
     keywords_file: tabtenders
     roles:
         tender_owner:   tabtenders_Owner
         viewer:         tabtenders_Viewer
         provider:       tabtenders_Provider1
+        provider1:      tabtenders_Provider2
