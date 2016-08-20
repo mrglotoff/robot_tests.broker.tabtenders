@@ -518,37 +518,25 @@ Run test session
   ...      ${ARGUMENTS[1]} ==  fieldname
   Log to console                      \n[ INFO ] : Отримати інформацію з тендера
   Log to console                      "@{ARGUMENTS}"
-  ${return_value}=  run keyword  Отримати інформацію про ${ARGUMENTS[1]}
+  ${return_value}=  Run keyword     Отримати інформацію про ${ARGUMENTS[1]}
   Log to console     [ INFO ] : ... ${return_value}
   [Return]  ${return_value}
 
 
-
-Find information on page
-  [Arguments]   ${fieldname}
-  ${return_value}=   ${locator.${fieldname}}
-  Log to console     [ INFO ] : Found ${fieldname} on page 
-  [Return]  ${return_value}
-
-
-
 Отримати інформацію про title
-  ${return_value}=   Find information on page   title
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.title}
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про description
-  ${return_value}=   Find information on page   description
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.description}
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про value.amount
-  ${return_value}=   Find information on page  value.amount
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.value.amount}
   ${return_value}=   Convert To Number   ${return_value}
   [Return]  ${return_value}
 
@@ -561,23 +549,20 @@ Find information on page
 
 
 Отримати інформацію про value.valueAddedTaxIncluded
-  ${return_value}=   Find information on page   value.tax
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.value.tax}
   ${return_value}=   checkTaxIncluded           ${return_value}
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про tenderID
-  ${return_value}=   Find information on page   tenderId
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.tenderId}
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про procuringEntity.name
-  ${return_value}=   Find information on page   procuringEntity.name
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.procuringEntity.name}
   [Return]  ${return_value}
 
 
@@ -588,8 +573,7 @@ Find information on page
 
 
 Отримати інформацію про enquiryPeriod.endDate
-  ${return_value}=   Find information on page   enquiryPeriod.endDate
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.enquiryPeriod.endDate}
 
   [Return]  ${return_value}
 
@@ -601,16 +585,14 @@ Find information on page
 
 
 Отримати інформацію про tenderPeriod.endDate
-  ${return_value}=   Find information on page  tenderPeriod.endDate
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.tenderPeriod.endDate}
 
   [Return]    ${return_value}
 
 
 
 Отримати інформацію про minimalStep.amount
-  ${return_value}=   Find information on page   minimalStep.amount
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.minimalStep.amount}
   ${return_value}=   Convert To Number   ${return_value}
   [Return]   ${return_value}
 
@@ -618,8 +600,7 @@ Find information on page
 
 
 Отримати інформацію про items[0].deliveryDate.endDate
-  ${return_value}=   Find information on page  items[0].deliveryDate.endDate
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].deliveryDate.endDate}
 
   [Return]    ${return_value}
 
@@ -636,40 +617,35 @@ Find information on page
 
 
 Отримати інформацію про items[0].deliveryAddress.countryName
-  ${return_value}=   Find information on page  items[0].deliveryAddress.countryName
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].deliveryAddress.countryName}
 
   [Return]      ${return_value}
 
 
 
 Отримати інформацію про items[0].deliveryAddress.postalCode
-  ${return_value}=   Find information on page  items[0].deliveryAddress.postalCode
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].deliveryAddress.postalCode}
 
   [Return]      ${return_value}
 
 
 
 Отримати інформацію про items[0].deliveryAddress.region
-  ${return_value}=   Find information on page  items[0].deliveryAddress.region
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].deliveryAddress.region}
 
   [Return]   ${return_value}
 
 
 
 Отримати інформацію про items[0].deliveryAddress.locality
-  ${return_value}=   Find information on page  items[0].deliveryAddress.locality
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].deliveryAddress.locality}
 
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про items[0].deliveryAddress.streetAddress
-  ${return_value}=   Find information on page  items[0].deliveryAddress.streetAddress
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].deliveryAddress.streetAddress}
 
   [Return]  ${return_value}
 
@@ -681,16 +657,14 @@ Find information on page
 
 
 Отримати інформацію про items[0].classification.id
-  ${return_value}=   Find information on page  items[0].classification.id
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].classification.id}
 
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про items[0].classification.description
-  ${return_value}=   Find information on page  items[0].classification.description
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].classification.description}
   [Return]  ${return_value}
 
 
@@ -701,23 +675,20 @@ Find information on page
 
 
 Отримати інформацію про items[0].additionalClassifications[0].id
-  ${return_value}=   Find information on page  items[0].additionalClassifications[0].id
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].additionalClassifications[0].id}
 
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про items[0].additionalClassifications[0].description
-  ${return_value}=   Find information on page  items[0].additionalClassifications[0].description
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].additionalClassifications[0].description}
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про items[0].unit.name
-  ${return_value}=   Find information on page   jquery=span.quantity_name
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         jquery=span.quantity_name
 
   [Return]  ${return_value}
 
@@ -725,7 +696,6 @@ Find information on page
 
 Отримати інформацію про items[0].unit.code
   ${return_value}=   Get Element Attribute      jquery=span.quantity_name@data-unit_code
-  ${return_value}=   Get Text                   ${return_value}
 
   [Return]  ${return_value}
 
@@ -733,16 +703,14 @@ Find information on page
 
 
 Отримати інформацію про items[0].quantity
-  ${return_value}=   Find information on page   items[0].quantity
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].quantity}
   ${return_value}=   Convert To Number   ${return_value}
   [Return]  ${return_value}
 
 
 
 Отримати інформацію про items[0].description
-  ${return_value}=   Find information on page   items[0].description
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.items[0].description}
 
   [Return]  ${return_value}
 
@@ -798,9 +766,10 @@ Find information on page
 
 Отримати інформацію про status
   reload page
-  ${return_value}=   Find information on page   status
-  ${return_value}=   Get Text                   ${return_value}
+  ${return_value}=   Get Text         ${locator.status}
   [Return]  ${return_value}
+
+
 
 
 
